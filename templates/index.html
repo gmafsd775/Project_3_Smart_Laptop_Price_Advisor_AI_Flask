@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <title>Smart Laptop Price Advisor AI | Flask ML Project</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='css/style.css') }}">
+
+</head>
+
+<body>
+
+    <div class="background"></div>
+
+    <div class="container">
+
+        <div class="glass-card">
+
+            <header>
+
+            </header>
+
+            <main>
+
+                <section>
+
+                    <div class="logo">
+                        LAPTOP SMART AI
+                    </div>
+
+                <h1>Smart Laptop Price Advisor AI</h1>
+
+                <p class="hero-subtitle">Machine Learning Powered Laptop Price Prediction</p>
+
+                <img
+                    src="{{ url_for('static', filename='images/banner.png') }}"
+                    class="hero-banner"
+                    alt="Laptop Banner">
+
+                    <a id="result"></a>
+
+                        {% if predicted_price %}
+
+                    <div class="prediction-card" id="predictionResult">
+
+                        <h2> Prediction Complete</h2>
+
+                        <h1>{{ "{:,.0f}".format(predicted_price) }}</h1>
+
+                        <p class="prediction-subtitle">
+                            AI Estimated Laptop Price
+                        </p>
+
+                        <hr>
+
+                        <div class="prediction-details">
+
+                            <p><strong> Brand:</strong> {{ selected_brand }}</p>
+
+                            <p><strong> RAM:</strong> {{ selected_ram }} GB</p>
+
+                            <p><strong> Storage:</strong> {{ selected_storage }} GB</p>
+
+                            <p><strong> CPU:</strong> {{ selected_cpu }}</p>
+
+                            <p><strong> GPU:</strong> {{ selected_gpu }}</p>
+
+                        </div>
+
+                    </div>
+
+                    {% endif %}
+
+                    <p class="prediction-note">
+
+                    Prediction is generated using a Machine Learning model trained on historical laptop specifications.
+
+                    </p>
+
+                <form action="/" method="POST" class="glass-form" id="predictionForm">
+
+                    <div class="form-group">
+                        
+                    <label for="brand">Brand</label>
+
+                    <select id="brand" name="brand" required>
+
+                        <option value="Dell">Dell</option>
+                        <option value="HP">HP</option>
+                        <option value="Lenovo">Lenovo</option>
+                        <option value="Apple">Apple</option>
+
+                    </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="ram">RAM (GB)</label>
+
+                    <input
+                        type="number"
+                        id="ram"
+                        name="ram"
+                       placeholder="e.g. 16"
+                       min="2"
+                       max="128"
+                        required>
+                    </div>    
+
+                    <div class="form-group">
+                    <label for="rom">Storage (GB)</label>
+
+                    <input
+                        type="number"
+                        id="rom"
+                        name="rom"
+                        placeholder="e.g. 512"
+                        min="128"
+                        max="1024"
+                        required>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="ram_type">RAM Type</label>
+
+                    <select id="ram_type" name="ram_type" required>
+
+                        <option value="DDR3">DDR3</option>
+                        <option value="DDR4">DDR4</option>
+                        <option value="DDR5">DDR5</option>
+                        <option value="LPDDR4">LPDDR4</option>
+                        <option value="LPDDR4X">LPDDR4X</option>
+                        <option value="LPDDR5">LPDDR5</option>
+                        <option value="LPDDR5X">LPDDR5X</option>
+                        <option value="Unified">Unified</option>
+
+                    </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="rom_type">ROM Type</label>
+
+                    <select id="rom_type" name="rom_type" required>
+
+                        <option value="SSD">SSD</option>
+                        <option value="Hard-Disk">Hard-Disk</option>
+
+                    </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="cpu_brand">CPU Brand</label>
+
+                    <select id="cpu_brand" name="cpu_brand" required>
+
+                        <option value="Intel">Intel</option>
+                        <option value="AMD">AMD</option>
+                        <option value="Apple">Apple</option>
+                        <option value="MediaTek">MediaTek</option>
+
+                    </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="gpu_brand">GPU Brand</label>
+
+                    <select id="gpu_brand" name="gpu_brand" required>
+
+                        <option value="Intel">Intel</option>
+                        <option value="AMD">AMD</option>
+                        <option value="Apple">Apple</option>
+                        <option value="NVIDIA">NVIDIA</option>
+                        <option value="ARM">ARM</option>
+
+                    </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="os">Operating System</label>
+
+                    <select id="os" name="os" required>
+
+                        <option value="Windows 11 OS">Windows 11</option>
+                        <option value="Windows 10 OS">Windows 10</option>
+                        <option value="Windows OS">Windows</option>
+                        <option value="Ubuntu OS">Ubuntu</option>
+                        <option value="Chrome OS">Chrome OS</option>
+                        <option value="DOS OS">DOS</option>
+                        <option value="Mac OS">Mac OS</option>
+
+                    </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="cpu_family">CPU Family</label>
+
+                    <select id="cpu_family" name="cpu_family" required>
+
+                        <option value="Core">Core</option>
+                        <option value="Ryzen">Ryzen</option>
+                        <option value="M Series">M Series</option>
+                        <option value="Celeron">Celeron</option>
+                        <option value="Pentium">Pentium</option>
+                        <option value="MediaTek">MediaTek</option>
+                        <option value="Other">Other</option>
+
+                    </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="cpu_series">CPU Series</label>
+
+                    <select id="cpu_series" name="cpu_series" required>
+
+                        <option value="i3">Core i3</option>
+                        <option value="i5">Core i5</option>
+                        <option value="i7">Core i7</option>
+                        <option value="i9">Core i9</option>
+
+                        <option value="Ryzen 3">Ryzen 3</option>
+                        <option value="Ryzen 5">Ryzen 5</option>
+                        <option value="Ryzen 7">Ryzen 7</option>
+                        <option value="Ryzen 9">Ryzen 9</option>
+
+                        <option value="M1">Apple M1</option>
+                        <option value="M1 Pro">Apple M1 Pro</option>
+                        <option value="M1 Max">Apple M1 Max</option>
+
+                        <option value="M2">Apple M2</option>
+                        <option value="M2 Pro">Apple M2 Pro</option>
+                        <option value="M2 Max">Apple M2 Max</option>
+
+                        <option value="Other">Other</option>
+
+                    </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="gpu_series">GPU Series</label>
+
+                    <select id="gpu_series" name="gpu_series" required>
+
+                        <option value="RTX">RTX</option>
+                        <option value="GTX">GTX</option>
+                        <option value="MX">MX</option>
+
+                        <option value="Iris Xe">Iris Xe</option>
+                        <option value="Iris Plus">Iris Plus</option>
+                        <option value="UHD">UHD</option>
+                        <option value="HD">HD</option>
+
+                        <option value="Radeon">Radeon</option>
+                        <option value="Radeon RX">Radeon RX</option>
+                        <option value="Radeon Vega">Radeon Vega</option>
+
+                        <option value="Apple GPU">Apple GPU</option>
+
+                        <option value="Mali">Mali</option>
+
+                        <option value="Quadro">Quadro</option>
+
+                        <option value="Other">Other</option>
+
+                    </select>
+                    </div>
+
+                    <div class="form-group">
+                    <label for="spec_rating">Spec Rating</label>
+
+                    <input
+                        type="number"
+                        id="spec_rating"
+                        name="spec_rating"
+                        placeholder="e.g. 73"
+                        min="0"
+                        max="100"
+                        step="0.1"
+                        required>
+                    </div>    
+
+                    <div class="form-group">
+                    <label for="display_size">Display Size (Inches)</label>
+
+                    <input
+                        type="number"
+                        id="display_size"
+                        name="display_size"
+                        placeholder="e.g. 15.6"
+                        step="0.1"
+                        required>
+                    </div>    
+                        
+                    <div class="form-group">
+                    <label for="resolution_width">Resolution Width</label>
+
+                    <input
+                        type="number"
+                        id="resolution_width"
+                        name="resolution_width"
+                        placeholder="e.g. 1920"
+                        required>
+                    </div>        
+
+                    <div class="form-group">
+                    <label for="resolution_height">Resolution Height</label>
+
+                    <input
+                        type="number"
+                        id="resolution_height"
+                        name="resolution_height"
+                        placeholder="e.g. 1080"
+                        required> 
+                    </div>       
+
+                    <div class="form-group">
+                    <label for="warranty">Warranty (Years)</label>
+
+                    <input
+                        type="number"
+                        id="warranty"
+                        name="warranty"
+                        placeholder="e.g. 1"
+                        min="0"
+                        required>
+                    </div>    
+                        
+                    <div class="form-group">
+                    <label for="cpu_generation">CPU Generation</label>
+
+                    <input
+                        type="number"
+                        id="cpu_generation"
+                        name="cpu_generation"
+                        placeholder="e.g. 12"
+                        min="0"
+                        required>
+                    </div>    
+
+                    <div class="form-group">
+                    <label for="cpu_cores">CPU Cores</label>
+
+                    <input
+                        type="number"
+                        id="cpu_cores"
+                        name="cpu_cores"
+                        placeholder="e.g. 8"
+                        min="1"
+                        required>
+                    </div>    
+
+                    <div class="form-group">
+                    <label for="cpu_threads">CPU Threads</label>
+
+                    <input
+                        type="number"
+                        id="cpu_threads"
+                        name="cpu_threads"
+                        placeholder="e.g. 16"
+                        min="1"
+                        required>
+                    </div>                        
+
+                    <div class="form-group">
+                    <label for="gpu_memory">GPU Memory (GB)</label>
+
+                    <input
+                        type="number"
+                        id="gpu_memory"
+                        name="gpu_memory"
+                        placeholder="e.g. 4"
+                        min="0"
+                        required>   
+                    </div> 
+
+                    <button
+                        type="submit"
+                        class="predict-btn">
+
+                        Predict Price
+
+                    </button>
+
+                </form>
+
+                    <div class="chart-card">
+
+                        <h2>Average Laptop Price by Brand</h2>
+
+                        <canvas id="brandChart"></canvas>
+
+                    </div>
+
+                    <div class="info-card">
+
+                        <h2>About This AI</h2>
+
+                        <div class="info-grid">
+
+                            <div>
+
+                                <h4>Algorithm</h4>
+
+                                <p>Linear Regression</p>
+
+                            </div>
+
+                            <div>
+
+                                <h4>Dataset</h4>
+
+                                <p>Laptop Price Dataset</p>
+
+                            </div>
+
+                            <div>
+
+                                <h4>Features</h4>
+
+                                <p>106 Engineered Features</p>
+
+                            </div>
+
+                            <div>
+
+                                <h4>R² Score</h4>
+
+                                <p>0.863</p>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </section>
+
+            </main>
+
+        </div>
+
+    </div>
+
+    <footer>
+
+    Smart Laptop Price Advisor AI
+
+    <br><br>
+
+    Built with Flask • Scikit-Learn • Python
+
+    <br><br>
+
+    © 2026 Ahmed Nawaz
+
+    </footer>
+
+    <script>
+
+    const chartLabels = {{ chart_labels | tojson }};
+    const chartValues = {{ chart_values | tojson }};
+
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+
+</body>
+
+</html>
